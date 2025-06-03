@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-# Function to create a virtual environment
 setup_virtualenv() {
     echo "Creating a virtual environment and installing necessary libraries..."
     python3 -m venv myenv
@@ -9,7 +8,6 @@ setup_virtualenv() {
     echo "The virtual environment has been created and libraries have been successfully installed."
 }
 
-# Function to start the automation
 run_automation() {
     echo "Please choose the directory for automation:"
     while true; do
@@ -28,7 +26,7 @@ run_automation() {
     read -p "Enter the name of the new directory for processed images: " new_directory
 
     echo "Starting the process of resizing and archiving images..."
-    source myenv/bin/activate  # Activate the virtual environment
+    source myenv/bin/activate
     python3 - <<EOF
 import os
 import zipfile
@@ -38,7 +36,6 @@ from multiprocessing import Pool, Manager
 from PIL import Image, ImageFile
 from tqdm import tqdm
 
-# Configuration to load truncated images
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 def resize_image_task(args):
@@ -90,7 +87,6 @@ def process_directory(directory, new_directory, zip_file, max_size_kb=100, timeo
                 pool.terminate()
                 break
 
-    # Add resized images to zip file
     for _, output_path, _, _, _ in files_to_process:
         if os.path.exists(output_path):
             zip_file.write(output_path, os.path.relpath(output_path, new_directory))
@@ -120,7 +116,6 @@ EOF
     echo "The resizing and archiving process is complete. Check the results in the terminal."
 }
 
-# Main menu
 while true; do
     clear
     echo "Image Automation Menu"
